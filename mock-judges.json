@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Іван Петренко",
+    "region": "Київська",
+    "level": "National"
+  },
+  {
+    "name": "Олена Шевченко",
+    "region": "Львівська",
+    "level": "National"
+  },
+  {
+    "name": "Сергій Коваль",
+    "region": "Полтавська",
+    "level": "Regional"
+  }
+]

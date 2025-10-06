@@ -1,0 +1,25 @@
+
+<section data-page="teams" style="margin-top:16px">
+  <h2>Команди</h2>
+  <form id="teamsFilters" class="card" style="margin:12px 0;display:grid;gap:12px">
+    <div class="grid grid--3">
+      <label>Пошук
+        <input class="input" type="search" name="q" placeholder="Назва або місто" />
+      </label>
+      <label>Місто
+        <input class="input" type="text" name="city" placeholder="Напр. Київ" />
+      </label>
+      <label>Сортування
+        <select class="select" name="sort">
+          <option value="name">Назва</option>
+          <option value="city">Місто</option>
+        </select>
+      </label>
+    </div>
+    <div>
+      <button class="btn btn--primary" type="submit">Фільтрувати</button>
+      <button class="btn" type="reset">Скинути</button>
+    </div>
+  </form>
+  <div id="teamsList" class="grid grid--3" style="margin-top:12px"></div>
+</section>

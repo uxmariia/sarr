@@ -1,0 +1,34 @@
+
+<section data-page="results" style="margin-top:16px">
+  <h2>Результати</h2>
+  <form id="resultsFilters" class="card" style="margin:12px 0;display:grid;gap:12px">
+    <div class="grid grid--3">
+      <label>Пошук
+        <input type="search" name="q" placeholder="Змагання/спортсмен/собака" />
+      </label>
+      <label>Мін. очки
+        <input type="number" name="min" placeholder="0" />
+      </label>
+      <label>Сортувати за
+        <select name="sort"><option value="event">Змагання</option><option value="handler">Спортсмен</option><option value="dog">Собака</option><option value="points">Очки</option></select>
+      </label>
+    </div>
+    <div>
+      <button class="btn btn--primary" type="submit">Застосувати</button>
+      <button class="btn" type="reset">Скинути</button>
+    </div>
+  </form>
+  <div class="card" style="overflow:auto">
+    <table id="resultsTable" style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th data-sort="event">Змагання</th>
+          <th data-sort="handler">Спортсмен</th>
+          <th data-sort="dog">Собака</th>
+          <th data-sort="points">Очки</th>
+        </tr>
+      </thead>
+      <tbody><tr><td colspan="4" class="muted">Завантаження…</td></tr></tbody>
+    </table>
+  </div>
+</section>

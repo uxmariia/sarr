@@ -1,0 +1,26 @@
+
+<section data-page="rating" style="margin-top:16px">
+  <h2>Рейтинг спортсменів</h2>
+  <form id="ratingFilters" class="card" style="margin:12px 0;display:grid;gap:12px">
+    <div class="grid grid--3">
+      <label>Пошук
+        <input type="search" name="q" placeholder="Спортсмен або собака" />
+      </label>
+      <label>Мін. очки
+        <input type="number" name="min" placeholder="0" />
+      </label>
+      <label>Сортувати за
+        <select name="sort"><option value="points">Очки</option><option value="handler">Спортсмен</option><option value="dog">Собака</option></select>
+      </label>
+    </div>
+    <div>
+      <button class="btn btn--primary" type="submit">Застосувати</button>
+      <button class="btn" type="reset">Скинути</button>
+    </div>
+  </form>
+  <div id="ratingGate" class="card" hidden>
+    <p class="muted">Перегляд рейтингу доступний лише авторизованим користувачам.</p>
+    <p><a class="btn btn--primary" href="#/login">Увійти</a></p>
+  </div>
+  <div id="ratingList" class="grid grid--3" style="margin-top:12px"></div>
+</section>

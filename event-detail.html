@@ -1,0 +1,33 @@
+
+<section data-page="event-detail" style="margin-top:16px">
+  <nav aria-label="breadcrumb" class="muted" style="margin-bottom:8px">
+    <a href="#/events">← До списку змагань</a>
+  </nav>
+  <div id="eventDetail" class="card" aria-busy="true">Завантаження…</div>
+
+  <dialog id="regDialog">
+    <form method="dialog" class="card" style="min-width:320px;max-width:520px"><div id="regBanner" class="banner banner--error" hidden></div>
+      <h3>Реєстрація на змагання</h3>
+      <p class="muted" id="regEventTitle">Подія</p>
+      <div class="form-field"><label>Ім'я та Прізвище
+        <input class="input" name="fullName" required />
+      </label><div class="field-error" data-err="class"></div></div><div class="field-error" data-err="dogName"></div></div><div class="field-error" data-err="email"></div></div><div class="field-error" data-err="fullName"></div></div>
+      <div class="form-field"><label>Email
+        <input class="input" type="email" name="email" required />
+      </label><div class="field-error" data-err="class"></div></div><div class="field-error" data-err="dogName"></div></div><div class="field-error" data-err="email"></div></div><div class="field-error" data-err="fullName"></div></div>
+      <div class="form-field"><label>Кличка собаки
+        <input class="input" name="dogName" required />
+      </label><div class="field-error" data-err="class"></div></div><div class="field-error" data-err="dogName"></div></div><div class="field-error" data-err="email"></div></div><div class="field-error" data-err="fullName"></div></div>
+      <div class="form-field"><label>Категорія/клас
+        <select class="select" name="class" required>
+          <option value="">Оберіть…</option>
+          <option>TR-1</option><option>TR-2</option><option>Area Search</option>
+        </select>
+      </label><div class="field-error" data-err="class"></div></div><div class="field-error" data-err="dogName"></div></div><div class="field-error" data-err="email"></div></div><div class="field-error" data-err="fullName"></div></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn" value="cancel">Скасувати</button>
+        <button class="btn btn--primary" value="ok">Подати заявку</button>
+      </div>
+    </form>
+  </dialog>
+</section>

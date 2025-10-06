@@ -1,0 +1,26 @@
+
+<section data-page="judges" style="margin-top:16px">
+  <h2>Судді</h2>
+  <form id="judgesFilters" class="card" style="margin:12px 0;display:grid;gap:12px">
+    <div class="grid grid--3">
+      <label>Пошук
+        <input class="input" type="search" name="q" placeholder="Ім'я або область" />
+      </label>
+      <label>Рівень
+        <select class="select" name="level">
+          <option value="">Всі</option>
+          <option>National</option>
+          <option>Regional</option>
+        </select>
+      </label>
+      <label>Область
+        <input class="input" type="text" name="region" placeholder="Напр. Київська" />
+      </label>
+    </div>
+    <div>
+      <button class="btn btn--primary" type="submit">Фільтрувати</button>
+      <button class="btn" type="reset">Скинути</button>
+    </div>
+  </form>
+  <div id="judgesList" class="grid grid--3" style="margin-top:12px"></div>
+</section>

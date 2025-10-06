@@ -1,0 +1,27 @@
+
+<section data-page="events" style="margin-top:16px">
+  <h2>Змагання</h2>
+  <form id="eventsFilters" class="card" style="margin:12px 0;display:grid;gap:12px">
+    <div class="grid grid--3">
+      <label>Пошук
+        <input class="input" type="search" name="q" placeholder="Назва або місто" />
+      </label>
+      <label>Дисципліна
+        <select class="select" name="discipline">
+          <option value="">Всі</option>
+          <option>TR-1</option><option>TR-2</option><option>Area Search</option>
+        </select>
+      </label>
+      <label>Починаючи з дати
+        <input class="input" type="date" name="from" />
+      </label>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn--primary" type="submit">Застосувати</button>
+      <button class="btn" type="reset">Скинути</button>
+    </div>
+  </form>
+
+  <div id="eventsList" class="grid grid--3" style="margin-top:12px"></div>
+  <div id="eventsPager" style="display:flex;gap:8px;justify-content:center;margin:16px 0"></div>
+</section>

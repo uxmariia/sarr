@@ -1,0 +1,32 @@
+
+<section data-page="login" style="margin-top:16px;max-width:520px">
+  <div class="card" style="display:grid;gap:8px">
+    <div class="tabs"><button class="tab btn btn--primary" data-auth-tab="login" aria-selected="true">Вхід</button><button class="tab btn" data-auth-tab="register" aria-selected="false">Реєстрація</button></div>
+      
+    </nav>
+
+    <form id="loginForm" autocomplete="on" style="display:grid;gap:8px"><div id="loginBanner" class="banner banner--error" hidden></div>
+      <div class="form-field"><label>Email
+        <input class="input" type="email" name="email" required placeholder="you@example.com"/>
+      </label><div class="field-error" data-err="fullName"></div></div><div class="field-error" data-err="password"></div></div><div class="field-error" data-err="email"></div></div>
+      <div class="form-field"><div class="form-field"><label>Пароль
+        <input class="input" type="password" name="password" required minlength="6" />
+      </label><div class="field-error" data-err="fullName"></div></div><div class="field-error" data-err="password"></div></div><div class="field-error" data-err="email"></div></div>
+      <button class="btn btn--primary" type="submit">Увійти</button>
+    </form>
+
+    <form id="registerForm" autocomplete="on" style="display:none;gap:8px"><div id="registerBanner" class="banner banner--error" hidden></div>
+      <div class="form-field"><label>Email
+        <input class="input" type="email" name="email" required placeholder="you@example.com"/>
+      </label><div class="field-error" data-err="fullName"></div></div><div class="field-error" data-err="password"></div></div><div class="field-error" data-err="email"></div></div>
+      <div class="form-field"><div class="form-field"><label>Пароль
+        <input class="input" type="password" name="password" required minlength="6" />
+      </label><div class="field-error" data-err="fullName"></div></div><div class="field-error" data-err="password"></div></div><div class="field-error" data-err="email"></div></div>
+      <div class="form-field"><label>ПІБ
+        <input class="input" type="text" name="fullName" placeholder="Ім'я Прізвище"/>
+      </label><div class="field-error" data-err="fullName"></div></div><div class="field-error" data-err="password"></div></div><div class="field-error" data-err="email"></div></div>
+      <button class="btn btn--primary" type="submit">Створити акаунт</button>
+    </form>
+  </div>
+  <p class="muted">Після входу зможете реєструватися на змагання та переглядати рейтинг.</p>
+</section>
