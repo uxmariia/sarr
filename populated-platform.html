@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAR Ukraine - Платформа для пошуково-рятувальної кінологічної служби</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1629 100%);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .nav-item {
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            background: transparent;
+            border: none;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .nav-item:hover::before {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-login {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 73px;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: slideDown 0.3s ease;
+            z-index: 99;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mobile-nav .nav-item {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .mobile-nav .nav-item:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        .mobile-nav .btn-login {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border: none;
+        }
+
+        .mobile-nav .nav-item {
+            width: 100%;
+            justify-content: flex-start;
+            padding: 14px 18px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 24px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #a5b4fc;
+            margin-bottom: 24px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 24px;
+            margin: 0 auto 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            animation: fadeIn 1s ease 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #94a3b8;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            animation: fadeIn 1s ease 0.5s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeIn 1s ease 0.7s both;
+        }
+
+        .btn-primary {
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+            padding: 16px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Features Grid */
+        .features {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 24px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            color: #94a3b8;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .feature-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #a5b4fc;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover .feature-link {
+            color: #c7d2fe;
+            gap: 12px;
+        }
+
+        /* About Section */
+        .about {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
+        }
+
+        .about-box {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 60px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+        }
+
+        .about-box h2 {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 28px;
+            text-align: center;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .about-box p {
+            font-size: 17px;
+            color: #94a3b8;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Page Content */
+        .page-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+            text-align: left;
+        }
+
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            color: #94a3b8;
+        }
+
+        /* Data Cards */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .data-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .data-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .data-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .data-card:hover {
+            transform: translateY(-4px);
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .data-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .data-card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .data-card-title {
+            flex: 1;
+        }
+
+        .data-card-title h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .data-card-title p {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .data-card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #a5b4fc;
+        }
+
+        .badge.badge-success {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+
+        .badge.badge-warning {
+            background: rgba(251, 146, 60, 0.2);
+            border-color: rgba(251, 146, 60, 0.3);
+            color: #fdba74;
+        }
+
+        /* List View */
+        .data-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .list-item {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+        }
+
+        .list-item:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateX(4px);
+        }
+
+        .list-rank {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .list-rank.gold {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+
+        .list-rank.silver {
+            background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+        }
+
+        .list-rank.bronze {
+            background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+        }
+
+        .list-content {
+            flex: 1;
+        }
+
+        .list-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .list-subtitle {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .list-points {
+            font-size: 24px;
+            font-weight: 800;
+            color: #6366f1;
+        }
+
+        /* Document Card */
+        .doc-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .doc-card:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .doc-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .doc-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .doc-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .doc-desc {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .features {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            
+            .data-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav, .btn-login {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero {
+                padding: 80px 24px 60px;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .hero-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 40px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .about-box {
+                padding: 40px 28px;
+            }
+
+            .about-box h2 {
+                font-size: 32px;
+            }
+
+            .page-header h1 {
+                font-size: 36px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .about-box {
+                padding: 32px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <div class="content-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo" onclick="showPage('home')">
+                    <div class="logo-icon">🏆</div>
+                    <span>SAR Ukraine</span>
+                </div>
+                
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    ☰
+                </button>
+
+                <nav class="nav">
+                    <button class="nav-item active" data-page="home">Змагання</button>
+                    <button class="nav-item" data-page="judges">Судді</button>
+                    <button class="nav-item" data-page="teams">Команди</button>
+                    <button class="nav-item" data-page="documents">Документи</button>
+                    <button class="nav-item" data-page="results">Результати</button>
+                    <button class="nav-item" data-page="rating">Рейтинг</button>
+                </nav>
+                <button class="btn-login">Увійти</button>
+            </div>
+        </header>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <nav class="mobile-nav">
+                <button class="nav-item" data-page="home">🏠 Змагання</button>
+                <button class="nav-item" data-page="judges">⚖️ Судді</button>
+                <button class="nav-item" data-page="teams">👥 Команди</button>
+                <button class="nav-item" data-page="documents">📄 Документи</button>
+                <button class="nav-item" data-page="results">🏆 Результати</button>
+                <button class="nav-item" data-page="rating">📊 Рейтинг</button>
+                <button class="btn-login" style="display: block; width: 100%; margin-top: 12px;">Увійти</button>
+            </nav>
+        </div>
+
+        <!-- Home Page -->
+        <div class="page active" id="home">
+            <section class="hero">
+                <div class="hero-content">
+                    <div class="hero-badge">✨ Нове покоління платформи SAR</div>
+                    <div class="hero-icon">🛡️</div>
+                    <h1>Платформа SAR Ukraine</h1>
+                    <p>Єдина платформа для спортсменів пошуково-рятувальної кінологічної служби</p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary" onclick="document.getElementById('competitions').scrollIntoView({behavior: 'smooth'})">
+                            Переглянути змагання
+                            <span>→</span>
+                        </button>
+                        <button class="btn-secondary">Зареєструватися</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="features">
+                <div class="feature-card" onclick="showPage('home')">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Змагання</h3>
+                    <p>Переглядайте майбутні змагання та реєструйтеся онлайн</p>
+                    <div class="feature-link">
+                        Перейти <span>→</span>
+                    </div>
+                </div>
+
+                <div class="feature-card" onclick="showPage('judges')">
+                    <div class="feature-icon">⚖️</div>
+                    <h3>Судді</h3>
+                    <p>База всіх сертифікованих суддів SAR в Україні</p>
+                    <div class="feature-link">
+                        Перейти <span>→</span>
+                    </div>
+                </div>
+
+                <div class="feature-card" onclick="showPage('teams')">
+                    <div class="feature-icon">👥</div>
+                    <h3>Команди</h3>
+                    <p>Знайдіть команди з пошуково-рятувальної кінології</p>
+                    <div class="feature-link">
+                        Перейти <span>→</span>
+                    </div>
+                </div>
+
+                <div class="feature-card" onclick="showPage('documents')">
+                    <div class="feature-icon">📄</div>
+                    <h3>Документи</h3>
+                    <p>Положення, регламенти та інші важливі документи</p>
+                    <div class="feature-link">
+                        Перейти <span>→</span>
+                    </div>
+                </div>
+
+                <div class="feature-card" onclick="showPage('results')">
+                    <div class="feature-icon">🏅</div>
+                    <h3>Результати</h3>
+                    <p>Результати минулих змагань</p>
+                    <div class="feature-link">
+                        Перейти <span>→</span>
+                    </div>
+                </div>
+
+                <div class="feature-card" onclick="showPage('rating')">
+                    <div class="feature-icon">📊</div>
+                    <h3>Рейтинг</h3>
+                    <p>Рейтинг спортсменів (для зареєстрованих)</p>
+                    <div class="feature-link">
+                        Перейти <span>→</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="competitions" class="page-content" style="padding-top: 40px;">
+                <div class="page-header">
+                    <h1>Найближчі змагання</h1>
+                    <p>Зареєструйтеся на змагання онлайн</p>
+                </div>
+                <div class="data-grid" id="eventsGrid"></div>
+            </section>
+
+            <section class="about">
+                <div class="about-box">
+                    <h2>Про SAR</h2>
+                    <p>Пошуково-рятувальна кінологічна служба (SAR) - це спеціалізована дисципліна, де собаки та їх провідники працюють разом для пошуку та рятування людей.</p>
+                    <p>Ця платформа створена для об'єднання спортсменів SAR по всій Україні, надання доступу до актуальної інформації про змагання, суддів, команди та рейтинги. Зареєструйтеся, щоб отримати повний доступ до всіх функцій.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Judges Page -->
+        <div class="page" id="judges">
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>Судді SAR</h1>
+                    <p>Сертифіковані судді з пошуково-рятувальної кінології в Україні</p>
+                </div>
+                <div class="data-grid" id="judgesGrid"></div>
+            </div>
+        </div>
+
+        <!-- Teams Page -->
+        <div class="page" id="teams">
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>Команди</h1>
+                    <p>Знайдіть команди з пошуково-рятувальної кінології</p>
+                </div>
+                <div class="data-grid" id="teamsGrid"></div>
+            </div>
+        </div>
+
+        <!-- Documents Page -->
+        <div class="page" id="documents">
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>Документи</h1>
+                    <p>Положення, регламенти та інші важливі документи</p>
+                </div>
+                <div class="data-grid" id="documentsGrid"></div>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <div class="page" id="results">
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>Результати</h1>
+                    <p>Результати минулих змагань</p>
+                </div>
+                <div class="data-list" id="resultsList"></div>
+            </div>
+        </div>
+
+        <!-- Rating Page -->
+        <div class="page" id="rating">
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>Рейтинг</h1>
+                    <p>Загальний рейтинг спортсменів SAR України</p>
+                </div>
+                <div class="data-list" id="ratingList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const eventsData = [
+            {
+                "title": "SAR Кременчук — Осінь",
+                "date": "2025-10-20",
+                "city": "Кременчук",
+                "discipline": "TR-1"
+            },
+            {
+                "title": "SAR Львів — Кубок",
+                "date": "2025-11-05",
+                "city": "Львів",
+                "discipline": "TR-2"
+            },
+            {
+                "title": "SAR Київ — Зимовий етап",
+                "date": "2025-12-12",
+                "city": "Київ",
+                "discipline": "Area Search"
+            }
+        ];
+
+        const judgesData = [
+            {
+                "name": "Іван Петренко",
+                "region": "Київська",
+                "level": "National"
+            },
+            {
+                "name": "Олена Шевченко",
+                "region": "Львівська",
+                "level": "National"
+            },
+            {
+                "name": "Сергій Коваль",
+                "region": "Полтавська",
+                "level": "Regional"
+            }
+        ];
+
+        const teamsData = [
+            {
+                "name": "SAR Київ",
+                "city": "Київ"
+            },
+            {
+                "name": "SAR Львів",
+                "city": "Львів"
+            },
+            {
+                "name": "SAR Харків",
+                "city": "Харків"
+            }
+        ];
+
+        const documentsData = [
+            {
+                "title": "Актуальне положення SAR (2025)",
+                "desc": "Правила та вимоги до змагань.",
+                "file": "files/sar-regulations-2025.pdf"
+            },
+            {
+                "title": "Шаблон заявки учасника",
+                "desc": "Заповніть та подайте організатору.",
+                "file": "files/participant-form.docx"
+            },
+            {
+                "title": "Шаблон заявки організатора",
+                "desc": "Документація для проведення етапу.",
+                "file": "files/organizer-pack.zip"
+            }
+        ];
+
+        const resultsData = [
+            {
+                "event": "Київ — Зимовий етап",
+                "handler": "Марія Іванчук",
+                "dog": "Рекс",
+                "points": 97
+            },
+            {
+                "event": "Львів — Кубок",
+                "handler": "Андрій Степанюк",
+                "dog": "Лада",
+                "points": 92
+            },
+            {
+                "event": "Кременчук — Осінь",
+                "handler": "Оксана Бойко",
+                "dog": "Тор",
+                "points": 89
+            }
+        ];
+
+        const ratingData = [
+            {
+                "handler": "Марія Іванчук",
+                "dog": "Рекс",
+                "points": 185
+            },
+            {
+                "handler": "Андрій Степанюк",
+                "dog": "Лада",
+                "points": 172
+            },
+            {
+                "handler": "Оксана Бойко",
+                "dog": "Тор",
+                "points": 160
+            }
+        ];
+
+        // Helper Functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('uk-UA', options);
+        }
+
+        function getDaysUntil(dateString) {
+            const today = new Date();
+            const eventDate = new Date(dateString);
+            const diffTime = eventDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        // Render Functions
+        function renderEvents() {
+            const grid = document.getElementById('eventsGrid');
+            grid.innerHTML = eventsData.map(event => {
+                const daysUntil = getDaysUntil(event.date);
+                const status = daysUntil < 0 ? 'Завершено' : daysUntil === 0 ? 'Сьогодні' : daysUntil === 1 ? 'Завтра' : `Через ${daysUntil} днів`;
+                const badgeClass = daysUntil < 0 ? '' : daysUntil <= 7 ? 'badge-warning' : 'badge-success';
+                
+                return `
+                    <div class="data-card">
+                        <div class="data-card-header">
+                            <div class="data-card-icon">🏆</div>
+                            <div class="data-card-title">
+                                <h3>${event.title}</h3>
+                                <p>${formatDate(event.date)}</p>
+                            </div>
+                        </div>
+                        <div class="data-card-info">
+                            <div class="info-row">
+                                <span class="info-label">Місто</span>
+                                <span class="info-value">${event.city}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Дисципліна</span>
+                                <span class="info-value">${event.discipline}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Статус</span>
+                                <span class="badge ${badgeClass}">${status}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderJudges() {
+            const grid = document.getElementById('judgesGrid');
+            grid.innerHTML = judgesData.map(judge => {
+                const levelText = judge.level === 'National' ? 'Національний' : 'Регіональний';
+                const badgeClass = judge.level === 'National' ? 'badge-success' : '';
+                
+                return `
+                    <div class="data-card">
+                        <div class="data-card-header">
+                            <div class="data-card-icon">⚖️</div>
+                            <div class="data-card-title">
+                                <h3>${judge.name}</h3>
+                                <p>${judge.region} область</p>
+                            </div>
+                        </div>
+                        <div class="data-card-info">
+                            <div class="info-row">
+                                <span class="info-label">Рівень</span>
+                                <span class="badge ${badgeClass}">${levelText}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Регіон</span>
+                                <span class="info-value">${judge.region}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderTeams() {
+            const grid = document.getElementById('teamsGrid');
+            grid.innerHTML = teamsData.map(team => {
+                return `
+                    <div class="data-card">
+                        <div class="data-card-header">
+                            <div class="data-card-icon">👥</div>
+                            <div class="data-card-title">
+                                <h3>${team.name}</h3>
+                                <p>${team.city}</p>
+                            </div>
+                        </div>
+                        <div class="data-card-info">
+                            <div class="info-row">
+                                <span class="info-label">Місто</span>
+                                <span class="info-value">${team.city}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Статус</span>
+                                <span class="badge badge-success">Активна</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderDocuments() {
+            const grid = document.getElementById('documentsGrid');
+            grid.innerHTML = documentsData.map(doc => {
+                const extension = doc.file.split('.').pop().toUpperCase();
+                const icon = extension === 'PDF' ? '📕' : extension === 'DOCX' ? '📘' : '📦';
+                
+                return `
+                    <div class="doc-card">
+                        <div class="doc-header">
+                            <div class="doc-icon">${icon}</div>
+                            <div style="flex: 1;">
+                                <div class="doc-title">${doc.title}</div>
+                                <div class="doc-desc">${doc.desc}</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+                            <span class="badge">${extension}</span>
+                            <button class="btn-secondary" style="padding: 8px 20px; font-size: 14px;">Завантажити</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderResults() {
+            const list = document.getElementById('resultsList');
+            list.innerHTML = resultsData.map((result, index) => {
+                const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : (index + 1);
+                
+                return `
+                    <div class="list-item">
+                        <div class="list-rank ${rankClass}">${medal}</div>
+                        <div class="list-content">
+                            <div class="list-title">${result.handler} & ${result.dog}</div>
+                            <div class="list-subtitle">${result.event}</div>
+                        </div>
+                        <div class="list-points">${result.points}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderRating() {
+            const list = document.getElementById('ratingList');
+            list.innerHTML = ratingData.map((rating, index) => {
+                const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : (index + 1);
+                
+                return `
+                    <div class="list-item">
+                        <div class="list-rank ${rankClass}">${medal}</div>
+                        <div class="list-content">
+                            <div class="list-title">${rating.handler} & ${rating.dog}</div>
+                            <div class="list-subtitle">Загальний рейтинг сезону</div>
+                        </div>
+                        <div class="list-points">${rating.points}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        const pages = document.querySelectorAll('.page');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        function showPage(pageName) {
+            pages.forEach(page => page.classList.remove('active'));
+            
+            const targetPage = document.getElementById(pageName);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            navItems.forEach(item => {
+                if (item.dataset.page === pageName) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Close mobile menu
+            mobileMenu.classList.remove('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('active');
+        }
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                showPage(item.dataset.page);
+            });
+        });
+
+        // Close mobile menu on resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderEvents();
+            renderJudges();
+            renderTeams();
+            renderDocuments();
+            renderResults();
+            renderRating();
+        });
+    </script>
+</body>
+</html>
